@@ -1,10 +1,15 @@
 package com.empresa.controller;
 
 import java.util.List;
+import java.util.Optional;
+
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,5 +48,19 @@ public class AlumnoController {
 		System.out.println(">>> inicio >>> actualiza " + obj.getIdAlumno());
 		Alumno objAlumno = service.insertaActualizaAlumno(obj);
 		return ResponseEntity.ok(objAlumno);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Alumno> elimina(@PathVariable("id") Integer idAlumno) {
+		System.out.println(">>> inicio >>> elimina " + idAlumno);
+		Optional<Alumno> optionAlumno = service.obtienePorId(idAlumno);
+		
+		if(optionAlumno.isPresent()) {
+			service.eliminaAlumno(idAlumno);
+			return ResponseEntity.ok(optionAlumno.get());
+		} else {
+			System.out.println(">>> No existe el alumno " + idAlumno);
+			return ResponseEntity.badRequest().build();
+		}
 	}
 }
