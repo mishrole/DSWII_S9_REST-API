@@ -46,8 +46,17 @@ public class AlumnoController {
 	@PutMapping
 	public ResponseEntity<Alumno> actualiza(@RequestBody Alumno obj) {
 		System.out.println(">>> inicio >>> actualiza " + obj.getIdAlumno());
-		Alumno objAlumno = service.insertaActualizaAlumno(obj);
-		return ResponseEntity.ok(objAlumno);
+		
+		Optional<Alumno> optionAlumno = service.obtienePorId(obj.getIdAlumno());
+		
+		if(optionAlumno.isPresent()) {
+			Alumno objAlumno = service.insertaActualizaAlumno(obj);
+			return ResponseEntity.ok(objAlumno);
+		} else {
+			System.out.println(">>> No existe el alumno " + obj.getIdAlumno());
+			return ResponseEntity.badRequest().build();
+		}
+		
 	}
 	
 	@DeleteMapping("/{id}")
