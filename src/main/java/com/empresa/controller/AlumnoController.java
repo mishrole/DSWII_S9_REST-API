@@ -36,6 +36,19 @@ public class AlumnoController {
 		return ResponseEntity.ok(listAlumno);
 	}
 	
+	@GetMapping("/{dni}")
+	public ResponseEntity<List<Alumno>> busca(@PathVariable("dni") String dni) {
+		System.out.println(">>> inicio >>> buscar " + dni);
+		List<Alumno> lstAlumno = service.listaPorDni(dni);
+		
+		if(lstAlumno.size() > 0) {
+			return ResponseEntity.ok(lstAlumno);
+		} else {
+			System.out.println(">>> No existe el alumno con dni" + dni);
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
 	@PostMapping
 	public ResponseEntity<Alumno> registra(@RequestBody Alumno obj) {
 		System.out.println(">>> inicio >>> registra " + obj.getNombre());
@@ -56,7 +69,7 @@ public class AlumnoController {
 			System.out.println(">>> No existe el alumno " + obj.getIdAlumno());
 			return ResponseEntity.badRequest().build();
 		}
-		
+
 	}
 	
 	@DeleteMapping("/{id}")
